@@ -1,4 +1,55 @@
-@MassTransit.Example_HostAddress = http://localhost:5155
+@MassTransit.Example_HostAddress = https://localhost:7001
+
+### Place Order - Success
+POST {{MassTransit.Example_HostAddress}}/place-order
+Content-Type: application/json
+
+{
+  "customerId": "11111111-1111-1111-1111-111111111111",
+  "lines": [
+    {
+      "productId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "quantity": 1,
+      "unitPrice": 999.99
+    },
+    {
+      "productId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+      "quantity": 2,
+      "unitPrice": 29.99
+    }
+  ]
+}
+
+### Place Order - Invalid Customer
+POST {{MassTransit.Example_HostAddress}}/place-order
+Content-Type: application/json
+
+{
+  "customerId": "99999999-9999-9999-9999-999999999999",
+  "lines": [
+    {
+      "productId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "quantity": 1,
+      "unitPrice": 999.99
+    }
+  ]
+}
+
+### Get Products - All
+GET {{MassTransit.Example_HostAddress}}/products
+Accept: application/json
+
+### Get Products - Specific IDs
+GET {{MassTransit.Example_HostAddress}}/products?productIds=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa,bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
+Accept: application/json
+
+### Check Customer Exists - Valid Customer
+GET {{MassTransit.Example_HostAddress}}/customers/11111111-1111-1111-1111-111111111111/exists
+Accept: application/json
+
+### Check Customer Exists - Invalid Customer
+GET {{MassTransit.Example_HostAddress}}/customers/99999999-9999-9999-9999-999999999999/exists
+Accept: application/jsonransit.Example_HostAddress = http://localhost:5155
 
 GET {{MassTransit.Example_HostAddress}}/weatherforecast/
 Accept: application/json

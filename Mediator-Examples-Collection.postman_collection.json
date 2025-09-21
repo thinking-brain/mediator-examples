@@ -406,6 +406,131 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "MassTransit Example API",
+      "description": "API endpoints for the MassTransit Example project demonstrating message-driven architecture",
+      "item": [
+        {
+          "name": "Place Order - Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    },\n    {\n      \"productId\": \"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb\",\n      \"quantity\": 2,\n      \"unitPrice\": 29.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{massTransitBaseUrl}}/place-order",
+              "host": [
+                "{{massTransitBaseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Places a successful order using MassTransit request/response pattern. This demonstrates:\n- Command handling with MassTransit consumers\n- Request/response messaging pattern\n- Event publishing to multiple consumers\n- Message-driven architecture"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{massTransitBaseUrl}}/place-order",
+                  "host": [
+                    "{{massTransitBaseUrl}}"
+                  ],
+                  "path": [
+                    "place-order"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"orderId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n    \"message\": \"Order placed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Place Order - Invalid Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"99999999-9999-9999-9999-999999999999\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{massTransitBaseUrl}}/place-order",
+              "host": [
+                "{{massTransitBaseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Tests validation with invalid customer ID in MassTransit message consumer."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -440,6 +565,18 @@
       "value": "http://localhost:5092",
       "type": "string",
       "description": "Base URL for the MediatR.Example API (HTTP)"
+    },
+    {
+      "key": "massTransitBaseUrl",
+      "value": "https://localhost:7200",
+      "type": "string",
+      "description": "Base URL for the MassTransit.Example API (HTTPS)"
+    },
+    {
+      "key": "massTransitHttpBaseUrl",
+      "value": "http://localhost:5155",
+      "type": "string",
+      "description": "Base URL for the MassTransit.Example API (HTTP)"
     }
   ]
 }

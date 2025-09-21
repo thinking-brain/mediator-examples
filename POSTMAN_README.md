@@ -1,6 +1,6 @@
 # Postman Collection for Mediator Examples
 
-This directory contains a comprehensive Postman collection for testing the Mediator Examples APIs.
+This directory contains a comprehensive Postman collection for testing both **MediatR** and **MassTransit** example APIs.
 
 ## Files
 
@@ -19,52 +19,61 @@ This directory contains a comprehensive Postman collection for testing the Media
    - Select `Mediator-Examples.postman_environment.json`
    - Set this as your active environment
 
-3. **Start the API**:
+3. **Start the APIs**:
    ```bash
+   # Terminal 1 - MediatR Example
    cd MeaditR.Example
+   dotnet run
+   
+   # Terminal 2 - MassTransit Example  
+   cd MassTransit.Example
    dotnet run
    ```
 
 ## Available Endpoints
 
-### MediatR.Example API
+### MediatR.Example API (Port 7076/5092)
 
-The collection includes comprehensive tests for the **Place Order** endpoint:
-
-#### Test Scenarios
+Traditional in-process mediator pattern using MediatR:
 
 1. **Place Order - Success** ✅
-   - Valid customer and products
-   - Tests successful order placement
-   - Demonstrates MediatR command handling
-
-2. **Place Order - Single Product** ✅
-   - Simple order with one item
-   - Uses Jane Smith's customer ID
-
+2. **Place Order - Single Product** ✅  
 3. **Place Order - High Value Order** ✅
-   - Multiple expensive items
-   - Tests loyalty points calculation
-
 4. **Place Order - Invalid Customer** ❌
-   - Non-existent customer ID
-   - Tests business rule validation
-
 5. **Place Order - Invalid Product** ❌
-   - Non-existent product ID
-   - Tests product validation
-
 6. **Place Order - Empty Lines** ❌
-   - Order with no items
-   - Tests edge case handling
-
 7. **Place Order - Invalid JSON** ❌
-   - Invalid data types
-   - Tests model binding validation
+
+### MassTransit.Example API (Port 7200/5155)
+
+Message-driven architecture using MassTransit:
+
+1. **Place Order - Success** ✅
+   - Request/Response pattern with message consumers
+2. **Place Order - Invalid Customer** ❌
+   - Tests message-based validation
+3. **Get Products - All** ✅
+   - Query pattern with MassTransit consumers  
+4. **Get Products - Specific IDs** ✅
+   - Parameterized queries via messaging
+5. **Check Customer Exists - Valid** ✅
+   - Simple request/response for existence check
+6. **Check Customer Exists - Invalid** ❌
+   - Tests non-existent customer flow
+
+## Architecture Comparison
+
+| Feature | MediatR Example | MassTransit Example |
+|---------|----------------|-------------------|
+| **Communication** | In-process calls | Message-based |
+| **Scalability** | Single service | Distributed |
+| **Fault Tolerance** | Basic try/catch | Built-in retry/dead letter |
+| **Event Handling** | Synchronous notifications | Asynchronous message consumers |
+| **Transport** | Memory | Configurable (In-Memory, RabbitMQ, etc.) |
 
 ## Sample Data
 
-The collection uses the following pre-configured test data:
+Both APIs use the same sample data:
 
 ### Customers
 - **John Doe**: `11111111-1111-1111-1111-111111111111`
@@ -77,74 +86,79 @@ The collection uses the following pre-configured test data:
 
 ## Environment Variables
 
-The environment includes the following variables:
-
-| Variable | Value | Description |
-|----------|-------|-------------|
-| `baseUrl` | `https://localhost:7076` | HTTPS endpoint |
-| `httpBaseUrl` | `http://localhost:5092` | HTTP endpoint |
-| `validCustomerId1` | John Doe's ID | Valid customer |
-| `validCustomerId2` | Jane Smith's ID | Valid customer |
-| `laptopProductId` | Laptop ID | Product ID |
-| `mouseProductId` | Mouse ID | Product ID |
-| `keyboardProductId` | Keyboard ID | Product ID |
-| `invalidCustomerId` | Invalid ID | For error testing |
-| `invalidProductId` | Invalid ID | For error testing |
+| Variable | MediatR Value | MassTransit Value | Description |
+|----------|---------------|-------------------|-------------|
+| `baseUrl` | `https://localhost:7076` | N/A | MediatR HTTPS |
+| `httpBaseUrl` | `http://localhost:5092` | N/A | MediatR HTTP |
+| `massTransitBaseUrl` | N/A | `https://localhost:7200` | MassTransit HTTPS |
+| `massTransitHttpBaseUrl` | N/A | `http://localhost:5155` | MassTransit HTTP |
 
 ## Expected Behaviors
 
-When you run the requests, you should see:
-
-### Console Logs (API Side)
-The application will log the following events:
-- Email confirmation sent
-- Loyalty points added
-- Integration events published
-- Audit logs recorded
-
-### Response Examples
-
-**Success Response:**
-```json
-{
-    "orderId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-    "message": "Order placed successfully"
-}
+### MediatR Example Console Output
+```
+info: MeaditR.Example.Services.EmailService[0]
+      Sending email to customer 11111111-1111-1111-1111-111111111111: Your order f47ac10b-58cc-4372-a567-0e02b2c3d479 was placed!
+info: MeaditR.Example.Services.LoyaltyService[0]
+      Adding 105 loyalty points to customer 11111111-1111-1111-1111-111111111111
 ```
 
-**Error Response:**
-```json
-{
-    "error": "Invalid customer"
-}
+### MassTransit Example Console Output
+```
+info: MassTransit[0]
+      Configured endpoint PlaceOrderCommand, Consumer: MassTransit.Example.Orders.PlaceOrderCommandConsumer
+info: MassTransit.Example.Orders.SendConfirmationEmailConsumer[0]
+      Sending confirmation email for order f47ac10b-58cc-4372-a567-0e02b2c3d479 to customer 11111111-1111-1111-1111-111111111111
 ```
 
-## Testing the MediatR Pattern
+## Testing Message Flows
 
-This collection demonstrates several key MediatR concepts:
+### Place Order Flow Comparison
 
-1. **Command Handling**: `PlaceOrderCommand` → `PlaceOrderHandler`
-2. **Domain Events**: `OrderCreated` notification
-3. **Multiple Handlers**: Email, Loyalty, Integration, Audit
-4. **Dependency Injection**: All services injected via DI
-5. **Error Handling**: Business rule validation
+**MediatR Flow:**
+1. HTTP Request → Controller
+2. Send Command → CommandHandler
+3. Publish Event → Multiple NotificationHandlers
+4. Return Response
 
-## Next Steps
+**MassTransit Flow:**
+1. HTTP Request → API Endpoint
+2. Send Message → PlaceOrderCommandConsumer
+3. Publish Event → Multiple Event Consumers (parallel)
+4. Return Response via Message
 
-You can extend this collection by adding:
-- Query endpoints (when implemented)
-- Additional MediatR examples from other projects
-- Pre-request scripts for dynamic data
-- Test scripts for assertions
-- Mock server responses
+### Event Handler Execution
+
+Both examples trigger the same business logic:
+- ✅ Send confirmation email
+- ✅ Add loyalty points  
+- ✅ Publish integration event
+- ✅ Audit logging
+
+**Key Difference:** MediatR executes handlers synchronously, MassTransit executes consumers asynchronously.
+
+## Use Case Recommendations
+
+### Choose MediatR When:
+- Building monolithic applications
+- Need simple in-process communication
+- Want minimal overhead
+- CQRS within single service
+
+### Choose MassTransit When:
+- Building distributed systems
+- Need message durability
+- Planning horizontal scaling
+- Require fault tolerance
+- Building microservices
 
 ## Troubleshooting
 
-### SSL Certificate Issues
-If you encounter SSL issues with HTTPS, either:
-1. Use the HTTP endpoint (`httpBaseUrl`)
-2. Disable SSL verification in Postman settings
-3. Add the development certificate to your trusted store
-
 ### Port Conflicts
-If the default ports are in use, update the `launchSettings.json` and environment variables accordingly.
+Update `launchSettings.json` in each project if ports are already in use.
+
+### SSL Issues
+Use the HTTP endpoints if SSL certificate issues occur.
+
+### MassTransit Consumer Issues
+Check the console output for consumer configuration messages - all consumers should be listed on startup.
