@@ -40,20 +40,6 @@ mediator-examples/
     └── POSTMAN_README.md
 ```
 
-## 🔄 Architecture Comparison
-
-| Aspect | MediatR Example | MassTransit Example |
-|--------|----------------|-------------------|
-| **Communication** | In-process method calls | Message passing |
-| **Coupling** | Tight coupling within process | Loose coupling via messages |
-| **Scalability** | Vertical (single process) | Horizontal (distributed) |
-| **Fault Tolerance** | Basic exception handling | Built-in retry, dead letter queues |
-| **Event Handling** | Synchronous notifications | Asynchronous message consumers |
-| **Transport** | Memory | Configurable (In-Memory, RabbitMQ, Azure Service Bus, etc.) |
-| **Deployment** | Monolithic | Can be distributed across services |
-| **Complexity** | Lower | Higher |
-| **Performance** | Lower latency | Higher throughput |
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -111,25 +97,6 @@ When an order is placed, both systems trigger:
 ### Sample Data
 - **Customers**: John Doe, Jane Smith
 - **Products**: Laptop ($999.99), Mouse ($29.99), Keyboard ($79.99)
-
-## 🎯 When to Use Which?
-
-### Use MediatR When:
-- ✅ Building **monolithic applications**
-- ✅ Need **simple in-process** communication  
-- ✅ Want **minimal overhead** and complexity
-- ✅ Implementing **CQRS within a single service**
-- ✅ Team is **new to message-driven architecture**
-- ✅ **Performance** is critical (lower latency)
-
-### Use MassTransit When:
-- ✅ Building **distributed systems**
-- ✅ Need **message durability** and delivery guarantees
-- ✅ Planning to **scale horizontally**
-- ✅ Require **fault tolerance** and resilience
-- ✅ Building **microservices architecture**
-- ✅ Need **async processing** capabilities
-- ✅ Want **transport flexibility** (RabbitMQ, Azure Service Bus, etc.)
 
 ## 🔍 Code Examples
 
@@ -215,4 +182,4 @@ Feel free to submit issues, fork the repository, and create pull requests for an
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GNU General Public License - see the LICENSE file for details.
