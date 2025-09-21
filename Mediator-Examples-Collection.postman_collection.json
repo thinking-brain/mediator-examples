@@ -1,0 +1,445 @@
+{
+  "info": {
+    "name": "Mediator Examples Collection",
+    "description": "A comprehensive collection for testing the Mediator Examples APIs, demonstrating MediatR patterns in .NET.",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "MediatR Example API",
+      "description": "API endpoints for the MediatR Example project demonstrating CQRS and Mediator patterns",
+      "item": [
+        {
+          "name": "Place Order - Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    },\n    {\n      \"productId\": \"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb\",\n      \"quantity\": 2,\n      \"unitPrice\": 29.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Places a successful order with valid customer ID and product IDs. This demonstrates:\n- Command handling with MediatR\n- Business rule validation\n- Domain event publishing\n- Multiple notification handlers execution"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/place-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "place-order"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"orderId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n    \"message\": \"Order placed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Place Order - Single Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"22222222-2222-2222-2222-222222222222\",\n  \"lines\": [\n    {\n      \"productId\": \"cccccccc-cccc-cccc-cccc-cccccccccccc\",\n      \"quantity\": 1,\n      \"unitPrice\": 79.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Places an order with a single product using Jane Smith's customer ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Place Order - High Value Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 3,\n      \"unitPrice\": 999.99\n    },\n    {\n      \"productId\": \"cccccccc-cccc-cccc-cccc-cccccccccccc\",\n      \"quantity\": 2,\n      \"unitPrice\": 79.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Places a high-value order to test loyalty points calculation (points = total/10)."
+          },
+          "response": []
+        },
+        {
+          "name": "Place Order - Invalid Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"99999999-9999-9999-9999-999999999999\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Attempts to place an order with an invalid customer ID to test validation logic."
+          },
+          "response": [
+            {
+              "name": "Bad Request - Invalid Customer",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"99999999-9999-9999-9999-999999999999\",\n  \"lines\": [\n    {\n      \"productId\": \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/place-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "place-order"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Invalid customer\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Place Order - Invalid Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Attempts to place an order with an invalid product ID to test product validation."
+          },
+          "response": [
+            {
+              "name": "Bad Request - Invalid Product",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": [\n    {\n      \"productId\": \"ffffffff-ffff-ffff-ffff-ffffffffffff\",\n      \"quantity\": 1,\n      \"unitPrice\": 999.99\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/place-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "place-order"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"error\": \"Some products do not exist\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Place Order - Empty Lines",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"11111111-1111-1111-1111-111111111111\",\n  \"lines\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Tests behavior when placing an order with no line items."
+          },
+          "response": []
+        },
+        {
+          "name": "Place Order - Invalid JSON",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"invalid-guid\",\n  \"lines\": [\n    {\n      \"productId\": \"not-a-guid\",\n      \"quantity\": \"not-a-number\",\n      \"unitPrice\": \"not-a-decimal\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/place-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "place-order"
+              ]
+            },
+            "description": "Tests model binding and validation with invalid data types."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7076",
+      "type": "string",
+      "description": "Base URL for the MediatR.Example API (HTTPS)"
+    },
+    {
+      "key": "httpBaseUrl",
+      "value": "http://localhost:5092",
+      "type": "string",
+      "description": "Base URL for the MediatR.Example API (HTTP)"
+    }
+  ]
+}
